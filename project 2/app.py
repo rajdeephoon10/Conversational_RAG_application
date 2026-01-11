@@ -2363,8 +2363,11 @@ with st.sidebar:
     show_sources_ui = st.checkbox("Show sources (from retrieved chunks)", value=True)
 
 # API key only required when NOT in demo mode
-api_key = st.text_input("Enter your Groq API key:", type="password") if not demo_mode else ""
+api_key = os.getenv("GROQ_API_KEY")
 
+if not demo_mode and not api_key:
+    st.error("Groq API key is not configured on the server.")
+    st.stop()
 # make session_id available early
 session_id = st.text_input("Session ID", value="default_session")
 
@@ -2932,4 +2935,5 @@ if user_input:
 
 else:
     st.info("Enter a question (or click a suggested question).")
+
 
